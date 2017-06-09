@@ -1,0 +1,31 @@
+<!--index.wxml-->
+<view class="container">
+  <navigator url="/pages/calendar/calendar">日历页面</navigator>
+  <button bindtap="showcalendar">日历弹窗</button>
+  <view>{{selectedDate}}</view>
+  <view class="calendar-container" animation="{{animation}}">
+  	<view class="close-btn-group"><view bindtap="closecalendar" class="icon iconfont icon-close"></view></view>
+  	<view class="nav-btn-group">
+	<view><view class="nav-btn-group-item icon iconfont icon-back" type="primary" size="mini" bindtap="prevMonth"></view></view>
+	<view class="nav-btn-group-item">{{currentMonth}}</view>
+	<view><view class="nav-btn-group-item icon iconfont icon-right" type="primary" size="mini" bindtap="nextMonth"></view></view>
+	</view>
+	<view class="table">
+		<view class="tr">
+		<block wx:for="{{week}}" wx:for-index="dayIndex" wx:for-item="dayItem">
+			<view class="td">{{dayItem}}</view>
+		</block>
+		</view>
+		<view  bindtap="calendaritemtap">
+			<block wx:for="{{date}}" wx:for-index="dateIndex" wx:for-item="dateItem">
+				<view class="tr">
+					<block wx:for="{{dateItem}}">
+						<view data-date="{{item.ymd}}" class="td {{item.ymd == selectedDate?'today':''}}">{{item.ymd == today?'今天':item.day}}</view>
+					</block>
+				</view>
+			</block>
+		</view>
+	</view>  	
+  </view>
+  <view class="{{bgClass}}"></view>
+</view>
