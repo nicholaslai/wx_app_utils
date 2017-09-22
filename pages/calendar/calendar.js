@@ -1,5 +1,5 @@
 var utils = require("../../utils/util");
-
+let selectedDate = "2017-09-20";
 // calendar.js
 Page({
 
@@ -7,103 +7,61 @@ Page({
    * 页面的初始数据
    */
   data: {
-    myAnimation:"",
     date: [],
     week: ["日","一","二","三","四","五","六"],
+    currentMonth: "",
+    selectedDate:"",
+    today: "",
+    animation: "",
+    bgClass: ""
   },
-  prevMonth: function (e) {
-    // body...
-    // var _date = this.selectedDateObj;
-    var that = this;
-    var currentMonth = that.currentMonth;
-    currentMonth = utils.getPrevMonth(new Date(currentMonth));
-    // var currentYearMonth = e.currentTarget.dataset.prevmonth;
-    // var arr = currentYearMonth.split("-");
-    // var dayThisMonth = getDays(arr[0], arr[1]);
-
-    that.currentMonth = currentMonth;
+  calendaritemtap: function(e) {
+    if(e.target.dataset.disabled) return;
     this.setData({
-      prevmonth: utils.getPrevMonth(new Date(currentMonth)),
-      nextmonth: utils.getNextMonth(new Date(currentMonth)),
-      currentMonth: currentMonth,
-      today: that.today,
-      selectedDate: that.selectedDate,
-      date: utils.sliceByWeek(utils.getFullEverydayOfMonth(utils.getEverydayOfMonth(new Date(currentMonth))))
-    })
-
-  },
-  nextMonth: function (e) {
-    // body...
-    // var _date = this.selectedDateObj;
-    var that = this;
-    var currentMonth = that.currentMonth;
-    currentMonth = utils.getNextMonth(new Date(currentMonth));
-    // var currentYearMonth = e.currentTarget.dataset.prevmonth;
-    // var arr = currentYearMonth.split("-");
-    // var dayThisMonth = getDays(arr[0], arr[1]);
-
-    that.currentMonth = currentMonth;
-    this.setData({
-      prevmonth: utils.getPrevMonth(new Date(currentMonth)),
-      nextmonth: utils.getNextMonth(new Date(currentMonth)),
-      currentMonth: currentMonth,
-      today: that.today,
-      selectedDate: that.selectedDate,
-      date: utils.sliceByWeek(utils.getFullEverydayOfMonth(utils.getEverydayOfMonth(new Date(currentMonth))))
-    })
-
-  },
-  calendaritemtap:function(e){
-    wx.navigateTo({
-      url:"/pages/calendar/calendar?date="+e.target.dataset.date
+      selectedDate: e.target.dataset.date
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-    // var str = "2017-5";
-    var now = new Date();
-    var selectedDate = (options && options.date)?options.date:utils.getDayMonthYear(now).ymd;
-    var selectedDateObj = new Date(selectedDate);
-    var that = this;
-    that.selectedDateObj = selectedDateObj;
-    var currentMonth = utils.getDayMonthYear(selectedDateObj).year + "-" + utils.getDayMonthYear(selectedDateObj).month;
-    // var arr = str.split("-");
-    // var dayThisMonth = utils.sliceByWeek(utils.getFullEverydayOfMonth(utils.getEverydayOfMonth(selectedDateObj)));
-    that.currentMonth = currentMonth;
-    that.today = utils.getDayMonthYear(now).ymd;
-
+  prevMonth: function () {
+    let currentYear = this.data.currentMonth.split("-")[0];
+    let currentMonth = this.data.currentMonth.split("-")[1];
+    let prevMonth = utils.getPrevMonth(currentMonth, currentYear);
+    currentYear = utils.formatNumber(prevMonth.year);
+    currentMonth = utils.formatNumber(prevMonth.month);
+    let daysArr = utils.getDaysArrByMonth(prevMonth.month, prevMonth.year);
+    let slicedDaysArr = utils.sliceDays(daysArr);
     this.setData({
-      prevmonth: utils.getPrevMonth(selectedDateObj),
-      nextmonth: utils.getNextMonth(selectedDateObj),
+      currentMonth: currentYear + "-" + currentMonth,
+      date: slicedDaysArr
+    })
+  },
+  nextMonth: function () {
+    let currentYear = this.data.currentMonth.split("-")[0];
+    let currentMonth = this.data.currentMonth.split("-")[1];
+    let nextMonth = utils.getNextMonth(currentMonth, currentYear);
+    currentYear = utils.formatNumber(nextMonth.year);
+    currentMonth = utils.formatNumber(nextMonth.month);
+    let daysArr = utils.getDaysArrByMonth(nextMonth.month, nextMonth.year);
+    let slicedDaysArr = utils.sliceDays(daysArr);
+    this.setData({
+      currentMonth: currentYear + "-" + currentMonth,
+      date: slicedDaysArr
+    })
+  },
+
+  onLoad: function () {
+    let _today = new Date();
+    let today = utils.formatDate(_today);
+    let currentYear = _today.getFullYear();
+    let currentMonth = utils.formatNumber(Number(_today.getMonth()) + 1);
+    let daysArr = utils.getDaysArrByMonth(_today.getMonth() + 1, _today.getFullYear());
+    let slicedDaysArr = utils.sliceDays(daysArr);
+    this.setData({
       selectedDate: selectedDate,
-      today: that.today,
-      currentMonth: that.currentMonth,
-      date: utils.sliceByWeek(utils.getFullEverydayOfMonth(utils.getEverydayOfMonth(currentMonth)))
+      today: today,
+      currentMonth: currentYear + "-" + currentMonth,
+      date: slicedDaysArr
     })
-// var _html = "<div class='tr'>";
-// for(var i = 0; i < ["日","一","二","三","四","五","六"].length; i++){
-//   _html += '<div class="td">'+ ["日","一","二","三","四","五","六"][i] +'</div>'
-// }
-// _html += "</div>";
-// document.querySelector("#thead").innerHTML = _html;
-// _html = "<div class='tr'>";
-// for(var i = 0; i < newDayThisMonth.length; i++){
-//   if(i>0 && i%7==0){
-//     _html += "</div><div class='tr'>";    
-//   }
-//   // debugger;
-//   _html += '<div class="td">'+ (newDayThisMonth[i]?newDayThisMonth[i].split("-")[2]:newDayThisMonth[i]) +'</div>'
-// }
-// _html += "</div>";
-// document.querySelector("#tbody").innerHTML = _html;
-
-
-    
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

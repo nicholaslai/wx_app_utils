@@ -5,20 +5,21 @@
 <view class="nav-btn-group-item">{{currentMonth}}</view>
 <view><view class="nav-btn-group-item icon iconfont icon-right" type="primary" size="mini" bindtap="nextMonth"></view></view>
 </view>
-<view class="table">
-	<view class="tr">
-	<block wx:for="{{week}}" wx:for-index="dayIndex" wx:for-item="dayItem">
-		<view class="td">{{dayItem}}</view>
-	</block>
-	</view>
-	<view bindtap="calendaritemtap">
-		<block wx:for="{{date}}" wx:for-index="dateIndex" wx:for-item="dateItem">
-			<view class="tr">
-				<block wx:for="{{dateItem}}">
-					<view data-date="{{item.ymd}}" class="td {{item.ymd == selectedDate?'today':''}}">{{item.ymd == today?'今天':item.day}}</view>
-				</block>
-			</view>
+	<view class="table">
+		<view class="tr">
+		<block wx:for="{{week}}" wx:for-index="dayIndex" wx:for-item="dayItem">
+			<view class="td">{{dayItem}}</view>
 		</block>
-	</view>
-</view>
+		</view>
+		<view  bindtap="calendaritemtap">
+			<block wx:for="{{date}}" wx:for-index="dateIndex" wx:for-item="dateItem">
+				<view class="tr">
+					<block wx:for="{{dateItem}}">
+						<view data-disabled="{{item.isPrevMonth || item.isNextMonth || !item.ymd.length ? true : ''}}"s data-date="{{item.ymd}}" class="td {{item.ymd == selectedDate?'selectedDate':item.isPrevMonth||item.isNextMonth?'disabled':''}}">{{item.ymd == today?'今天':item.day}}</view>
+					</block>
+				</view>
+			</block>
+		</view>
+	</view>  	
+  	<view style="text-align: center;">{{selectedDate}}</view>
 </view>

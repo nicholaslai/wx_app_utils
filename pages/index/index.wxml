@@ -20,7 +20,7 @@
 			<block wx:for="{{date}}" wx:for-index="dateIndex" wx:for-item="dateItem">
 				<view class="tr">
 					<block wx:for="{{dateItem}}">
-						<view data-date="{{item.ymd}}" class="td {{item.ymd == selectedDate?'today':''}}">{{item.ymd == today?'今天':item.day}}</view>
+						<view data-disabled="{{item.isPrevMonth || item.isNextMonth || !item.ymd.length ? true : ''}}" data-date="{{item.ymd}}" class="td {{item.ymd == selectedDate?'selectedDate':item.isPrevMonth||item.isNextMonth?'disabled':''}}">{{item.ymd == today?'今天':item.day}}</view>
 					</block>
 				</view>
 			</block>

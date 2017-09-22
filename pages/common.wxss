@@ -40,11 +40,17 @@
 	vertical-align: center;
 
 }
-.calendar-container .today {
+.calendar-container .disabled {
+	color: #ccc;
+}
+
+.calendar-container .selectedDate {
 	background-color: green;
 	border-radius: 3px;
 	color: #fff;
 }
+
+
 .calendar-container .nav-btn-group {
 	justify-content: space-around;
 	display: flex;
